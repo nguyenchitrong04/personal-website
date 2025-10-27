@@ -1,0 +1,836 @@
+<html lang="vi" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Web Cá Nhân - Nguyễn Chí Trọng</title>
+    <!-- Tải Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Cấu hình Tailwind và Font Inter -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#3b82f6', // Màu xanh dương
+                        'secondary': '#10b981', // Màu xanh lá cây
+                        'poke-yellow': '#fcd3d9', // Màu vàng Pikachu
+                        'currency-green': '#34d399', // Màu xanh lá cây nhạt cho tiền tệ
+                        'hcmus-blue': '#1e40af', // Màu xanh đậm đặc trưng (Màu chủ đạo logo)
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <!-- Tải Font Inter từ Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+        /* Thiết lập chuyển đổi mượt mà */
+        html {
+            scroll-behavior: smooth;
+        }
+        /* Style cho chế độ tối (Màu sắc mặc định khi có class 'dark' trên <html>) */
+        .dark body {
+            background-color: #1a1a2e; /* Nền tối */
+            color: #e4e4f0; /* Chữ sáng */
+        }
+        .dark .card {
+            background-color: #2c2c54;
+        }
+        .dark .navbar {
+            background-color: #16162d;
+        }
+        .dark .footer {
+            background-color: #16162d;
+        }
+        /* Style riêng cho các mục CV */
+        .cv-item {
+            border-left: 3px solid #10b981;
+            padding-left: 1rem;
+        }
+        /* Animation cho Pikachu card */
+        @keyframes bounce-y {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        .animate-bounce-y {
+            animation: bounce-y 1.5s infinite;
+        }
+        /* Custom weather icon styling */
+        .weather-icon {
+            display: inline-block;
+            width: 48px;
+            height: 48px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans transition-colors duration-300">
+
+    <!-- Thanh Điều Hướng (Navigation Bar) -->
+    <header id="navbar" class="navbar sticky top-0 z-50 bg-white dark:bg-gray-800 shadow-md transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <!-- Tên hoặc Logo -->
+            <a href="#hero" class="text-2xl font-extrabold text-primary">
+                Nguyễn Chí Trọng
+            </a>
+
+            <!-- Menu Điều Hướng Desktop -->
+            <nav class="hidden md:flex space-x-8">
+                <a href="#gioi-thieu" class="text-gray-400 hover:text-primary transition duration-150 font-medium">Giới Thiệu</a>
+                <a href="#ho-so" class="text-gray-400 hover:text-primary transition duration-150 font-medium">Hồ Sơ (CV)</a>
+                <a href="#du-an-api" class="text-gray-400 hover:text-secondary transition duration-150 font-medium font-bold">Dự Án API</a>
+                <a href="#du-an" class="text-gray-400 hover:text-primary transition duration-150 font-medium">Dự Án Khác</a>
+                <a href="#lien-he" class="text-gray-400 hover:text-primary transition duration-150 font-medium">Liên Hệ</a>
+            </nav>
+
+            <!-- Nút chuyển đổi Sáng/Tối và Menu Mobile -->
+            <div class="flex items-center space-x-4">
+                <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-700 transition duration-150">
+                    <!-- Icon Mặt Trời/Mặt Trăng -->
+                    <svg id="sun-icon" class="w-6 h-6 text-yellow-500 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 01-8 0 4 4 0 018 0z"></path></svg>
+                    <svg id="moon-icon" class="w-6 h-6 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                </button>
+                
+                <!-- Nút Menu Mobile (Hamburger) -->
+                <button id="mobile-menu-button" class="md:hidden p-2 rounded-lg hover:bg-gray-700 transition duration-150">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Menu Mobile Dropdown -->
+        <nav id="mobile-menu" class="hidden md:hidden bg-gray-800 shadow-lg px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            <a href="#gioi-thieu" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700">Giới Thiệu</a>
+            <a href="#ho-so" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700">Hồ Sơ (CV)</a>
+            <a href="#du-an-api" class="block px-3 py-2 rounded-md text-base font-medium text-secondary hover:bg-gray-700">Dự Án API</a>
+            <a href="#du-an" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700">Dự Án Khác</a>
+            <a href="#lien-he" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700">Liên Hệ</a>
+        </nav>
+    </header>
+
+    <!-- Nội dung chính -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+        <!-- Phần 1: Giới Thiệu Ngắn (Hero Section) -->
+        <section id="hero" class="flex flex-col md:flex-row items-center justify-between gap-12 pt-16 pb-24 min-h-screen">
+            <!-- Văn bản -->
+            <div class="md:w-1/2">
+                <p class="text-xl text-secondary font-semibold mb-3 animate-pulse">Xin chào, tôi là</p>
+                <h1 class="text-6xl sm:text-7xl font-extrabold leading-tight mb-4">
+                    <span class="text-primary">NGUYỄN CHÍ TRỌNG</span>
+                </h1>
+                <h2 class="text-3xl sm:text-4xl font-light text-gray-300 mb-6">
+                    Sinh viên Công nghệ Vật Lý Điện tử và Tin học
+                </h2>
+                <p class="text-lg text-gray-400 mb-2 max-w-lg">
+                    <span class="font-medium text-primary">Email:</span> nguyenchitrong04@gmail.com
+                </p>
+                <p class="text-lg text-gray-400 mb-8 max-w-lg">
+                    <span class="font-medium text-primary">Địa chỉ:</span> 73 Nguyễn Huệ, Phan Thiết, Bình Thuận
+                </p>
+                <div class="flex space-x-4">
+                    <a href="#ho-so" class="px-6 py-3 bg-primary text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300 transform hover:scale-105">
+                        Xem Hồ Sơ (CV)
+                    </a>
+                    <a href="#lien-he" class="px-6 py-3 border border-primary text-primary font-semibold rounded-lg shadow-md hover:bg-blue-50 transition duration-300 dark:hover:bg-gray-700">
+                        Liên Hệ
+                    </a>
+                </div>
+            </div>
+
+            <!-- Ảnh đại diện -->
+            <div class="md:w-1/2 flex justify-center mt-10 md:mt-0">
+                <div class="relative w-72 h-72 sm:w-96 sm:h-96">
+                    <!-- Vòng tròn trang trí -->
+                    <div class="absolute inset-0 border-4 border-primary rounded-full transform rotate-45 animate-spin-slow opacity-10"></div>
+                    
+                    <img class="w-full h-full object-cover rounded-full shadow-2xl border-4 border-white dark:border-gray-800 transition duration-300" 
+                         src="https://i.postimg.cc/jSWLg5FT/Screenshot-103.png" 
+                         alt="Ảnh đại diện Nguyễn Chí Trọng"
+                         onerror="this.onerror=null; this.src='https://i.postimg.cc/jSWLg5FT/Screenshot-103.png'">
+                </div>
+            </div>
+        </section>
+
+        <!-- Phần 2: Giới Thiệu Chung (About Me) -->
+        <section id="gioi-thieu" class="py-20">
+            <h2 class="text-4xl font-bold text-center mb-12 border-b-4 border-secondary inline-block pb-2">Giới Thiệu Chung</h2>
+            
+            <div class="card p-8 rounded-xl shadow-lg transition-colors duration-300">
+                <h3 class="text-2xl font-semibold text-primary mb-4">Mục Tiêu Cá Nhân</h3>
+                <p class="text-lg mb-6 leading-relaxed cv-item">
+                    Hướng đến việc phát triển bản thân thông qua làm việc trong môi trường chuyên nghiệp để học hỏi, tích lũy thêm kinh nghiệm và phát triển kỹ năng.
+                </p>
+                
+                <h3 class="text-2xl font-semibold text-primary mt-8 mb-4">Sở Thích</h3>
+                <div class="flex flex-wrap gap-4 cv-item">
+                    <span class="badge bg-secondary/20 text-secondary px-3 py-1 rounded-full text-sm font-medium">Nghe nhạc</span>
+                    <span class="badge bg-secondary/20 text-secondary px-3 py-1 rounded-full text-sm font-medium">Visual novel</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- PHẦN 3: HỒ SƠ CHI TIẾT (CV) -->
+        <section id="ho-so" class="py-20 bg-gray-100 dark:bg-gray-900 rounded-xl">
+            <h2 class="text-4xl font-bold text-center mb-12 border-b-4 border-primary inline-block pb-2">Hồ Sơ Chi Tiết (CV)</h2>
+            
+            <div class="card p-8 rounded-xl shadow-lg transition-colors duration-300 max-w-4xl mx-auto">
+                
+                <!-- 1. TRÌNH ĐỘ HỌC VẤN -->
+                <div class="mb-10">
+                    <h3 class="text-3xl font-bold text-primary mb-4 border-b pb-2">TRÌNH ĐỘ HỌC VẤN</h3>
+                    
+                    <div class="flex items-start gap-6">
+                        <!-- Logo Placeholder: Sử dụng placeholder URL với màu xanh đậm của logo -->
+                        <div class="flex-shrink-0 w-24 h-24 rounded-lg bg-hcmus-blue shadow-xl overflow-hidden">
+                            <img src="https://placehold.co/100x100/1e40af/ffffff?text=HCMUS" 
+                                 alt="Logo HCMUS Placeholder"
+                                 class="w-full h-full object-cover p-2">
+                        </div>
+                        
+                        <!-- Nội dung học vấn -->
+                        <div class="cv-item flex-grow">
+                            <p class="text-xl font-semibold">Đại học Khoa học Tự nhiên, ĐHQG-HCM</p>
+                            <p class="text-lg text-gray-400">Sinh viên năm 4</p>
+                            <p class="text-md text-gray-500 dark:text-gray-500">Chuyên ngành: Công nghệ Vật Lý Điện tử và Tin học</p>
+                            <p class="text-md text-gray-500 dark:text-gray-500">Dự kiến tốt nghiệp: Tháng 10/2026</p>
+                            <p class="text-md font-medium mt-1">Điểm TB: 7.14</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. KỸ NĂNG -->
+                <div class="mb-10">
+                    <h3 class="text-3xl font-bold text-primary mb-4 border-b pb-2">KỸ NĂNG</h3>
+                    <ul class="list-disc list-inside space-y-2 pl-4 text-lg">
+                        <li class="cv-item">Khả năng làm việc nhóm tốt</li>
+                        <li class="cv-item">Kỹ năng phân tích, quản lý thời gian hiệu quả</li>
+                        <li class="cv-item">Sử dụng tốt các công cụ văn phòng: Word, Excel</li>
+                        <li class="cv-item">Ngôn ngữ lập trình và công cụ: <span class="font-medium text-secondary">C++, Python, Proteus</span></li>
+                    </ul>
+                </div>
+
+                <!-- 3. ĐỒ ÁN THAM GIA -->
+                <div class="mb-10">
+                    <h3 class="text-3xl font-bold text-primary mb-4 border-b pb-2">ĐỒ ÁN THAM GIA</h3>
+                    <ul class="list-disc list-inside space-y-4 pl-4 text-lg">
+                        <li class="cv-item">Python: Population.</li>
+                        <li class="cv-item">Xử lý tín hiệu lọc nhiễu âm thanh.</li>
+                        <li class="cv-item">Dự đoán bệnh sử dụng máy học.</li>
+                        <li class="cv-item">Lắp ráp mô hình chuyển động bằng radar.</li>
+                        <li class="cv-item">Ứng dụng mạch đếm số vào bộ đếm vật thể và xử lý tín hiệu đèn giao thông cho người qua đường.</li>
+                    </ul>
+                </div>
+
+                <!-- 4. HOẠT ĐỘNG KHÁC -->
+                <div>
+                    <h3 class="text-3xl font-bold text-primary mb-4 border-b pb-2">HOẠT ĐỘNG & GIẢI THƯỞNG</h3>
+                    <div class="text-lg text-gray-400 cv-item">
+                        <p class="font-medium text-lg">Hoạt động Tình Nguyện và Ngoại Khóa</p>
+                        <p class="font-medium text-lg mt-2">Giải Thưởng</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+        
+        <!-- PHẦN 4: DỰ ÁN TÍCH HỢP API -->
+        <section id="du-an-api" class="py-20">
+            <h2 class="text-4xl font-bold text-center mb-12 border-b-4 border-primary inline-block pb-2">Dự Án Tích Hợp API</h2>
+            
+            <div class="max-w-7xl mx-auto grid md:grid-cols-3 gap-8">
+                
+                <!-- Card 1: POKEMON API (Pikachu) -->
+                <div id="pikachu-card" class="card p-6 rounded-xl shadow-lg border-2 border-poke-yellow/50 bg-yellow-900/10 text-center transition duration-300">
+                    <h3 class="text-2xl font-bold text-poke-yellow mb-4">POKEAPI: PIKACHU</h3>
+                    <div id="pikachu-data">
+                        <div class="flex justify-center items-center h-48">
+                            <svg class="animate-spin h-8 w-8 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            <p class="text-gray-400 ml-3">Đang tải dữ liệu...</p>
+                        </div>
+                    </div>
+                    <button id="toggle-shiny-button" 
+                            class="mt-4 px-4 py-2 bg-yellow-600 text-white font-semibold rounded-lg shadow-md hover:bg-yellow-700 transition duration-300 w-full disabled:opacity-50"
+                            title="Chuyển đổi giữa Pikachu thường và Shiny">
+                        Xem Shiny
+                    </button>
+                    <p class="text-sm text-gray-500 mt-4">Nguồn: https://pokeapi.co/api/v2/pokemon/pikachu</p>
+                </div>
+                
+                <!-- Card 2: EXCHANGE RATE API (USD -> VND) - CONVERTER -->
+                <div id="exchange-rate-card" class="card p-6 rounded-xl shadow-lg border-2 border-currency-green/50 bg-green-900/10 text-center transition duration-300">
+                    <h3 class="text-2xl font-bold text-currency-green mb-4">CHUYỂN ĐỔI TỶ GIÁ</h3>
+                    
+                    <div id="exchange-rate-data" class="flex flex-col gap-4">
+                        <!-- Tỷ giá hiện tại (loading state) -->
+                        <div id="current-rate-display" class="bg-green-700/30 p-2 rounded-lg text-sm font-medium text-currency-green">
+                             Đang tải tỷ giá...
+                        </div>
+
+                        <!-- Input USD -->
+                        <div class="flex flex-col items-start w-full">
+                            <label for="usd-input" class="text-sm font-medium mb-1 text-gray-300">Nhập USD:</label>
+                            <div class="relative w-full">
+                                <input type="text" id="usd-input" 
+                                       class="w-full px-4 py-2 border border-gray-600 rounded-lg focus:ring-currency-green focus:border-currency-green bg-gray-700 text-white text-lg pr-12"
+                                       value="1" min="0" step="0.01" placeholder="Số tiền USD">
+                                <span class="absolute right-3 top-1/2 transform -translate-y-1/2 text-currency-green font-bold">USD</span>
+                            </div>
+                        </div>
+
+                        <!-- Icon chuyển đổi -->
+                        <div class="text-2xl text-primary font-bold">
+                            &harr;
+                        </div>
+
+                        <!-- Input VND -->
+                        <div class="flex flex-col items-start w-full">
+                            <label for="vnd-input" class="block text-sm font-medium mb-1 text-gray-300">Kết quả VND:</label>
+                            <div class="relative w-full">
+                                <input type="text" id="vnd-input" 
+                                       class="w-full px-4 py-2 border border-gray-600 rounded-lg focus:ring-currency-green focus:border-currency-green bg-gray-700 text-white text-lg pr-12"
+                                       placeholder="Số tiền VND" readonly>
+                                <span class="absolute right-3 top-1/2 transform -translate-y-1/2 text-currency-green font-bold">VND</span>
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                    <button id="refresh-rate-button" 
+                            class="mt-6 px-4 py-2 bg-secondary text-white font-semibold rounded-lg shadow-md hover:bg-green-600 transition duration-300 w-full disabled:opacity-50"
+                            title="Làm mới tỷ giá">
+                        Làm mới tỷ giá
+                    </button>
+                    <!-- Cập nhật tên API hiển thị -->
+                    <p class="text-sm text-gray-500 mt-2">Nguồn: Exchangerate-API</p>
+                </div>
+
+
+                <!-- Card 3: OPEN-METEO API (Thời tiết Hà Nội) -->
+                <div id="weather-card" class="card p-6 rounded-xl shadow-lg border-2 border-blue-500/50 bg-blue-900/10 text-center transition duration-300">
+                    <h3 class="text-2xl font-bold text-blue-400 mb-4">OPEN-METEO: THỜI TIẾT</h3>
+                    <!-- Thêm span để cập nhật vị trí -->
+                    <p id="weather-location" class="text-sm text-blue-300 mb-4">Đang tìm vị trí...</p>
+                    <div id="weather-data" class="min-h-48 flex flex-col justify-center items-center">
+                        <svg class="animate-spin h-8 w-8 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <p class="text-gray-400 ml-3 mt-2">Đang tải dữ liệu...</p>
+                    </div>
+                    <!-- Nút làm mới mới được thêm vào đây -->
+                    <button id="refresh-weather-button" 
+                            class="mt-4 px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition duration-300 w-full disabled:opacity-50"
+                            title="Làm mới thời tiết">
+                        Làm mới
+                    </button>
+                    <p class="text-sm text-gray-500 mt-2">Nguồn: api.open-meteo.com</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Phần 5: DỰ ÁN KHÁC (Cũ) -->
+        <section id="du-an" class="py-20">
+            <h2 class="text-4xl font-bold text-center mb-12 border-b-4 border-secondary inline-block pb-2">Dự Án Khác (Từ CV)</h2>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Dự án 1: Python: Population -->
+                <div class="card p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-1">
+                    <h3 class="text-2xl font-bold text-primary mb-2">1. Python: Population</h3>
+                    <p class="text-gray-400 mb-4">
+                        Dự án sử dụng ngôn ngữ Python. (Cần bổ sung mô tả chi tiết nếu có).
+                    </p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-md">Python</span>
+                        <span class="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-md">Phân tích dữ liệu?</span>
+                    </div>
+                    <a href="#ho-so" class="text-secondary hover:text-green-600 font-medium">
+                        Xem chi tiết trong CV &rarr;
+                    </a>
+                </div>
+
+                <!-- Dự án 2: Xử lý tín hiệu lọc nhiễu âm thanh -->
+                <div class="card p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-1">
+                    <h3 class="text-2xl font-bold text-primary mb-2">2. Xử lý tín hiệu lọc nhiễu âm thanh</h3>
+                    <p class="text-gray-400 mb-4">
+                        Đồ án liên quan đến xử lý tín hiệu số để loại bỏ nhiễu từ âm thanh.
+                    </p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-md">Xử lý tín hiệu</span>
+                        <span class="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-md">Điện tử</span>
+                    </div>
+                    <a href="#ho-so" class="text-secondary hover:text-green-600 font-medium">
+                        Xem chi tiết trong CV &rarr;
+                    </a>
+                </div>
+
+                <!-- Dự án 3: Dự đoán bệnh sử dụng máy học -->
+                <div class="card p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-1">
+                    <h3 class="text-2xl font-bold text-primary mb-2">3. Dự đoán bệnh sử dụng máy học</h3>
+                    <p class="text-gray-400 mb-4">
+                        Ứng dụng các thuật toán Machine Learning vào lĩnh vực y tế.
+                    </p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-md">Máy học (ML)</span>
+                        <span class="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-md">Python</span>
+                    </div>
+                    <a href="#ho-so" class="text-secondary hover:text-green-600 font-medium">
+                        Xem chi tiết trong CV &rarr;
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Phần 6: Liên Hệ -->
+        <section id="lien-he" class="py-20">
+            <h2 class="text-4xl font-bold text-center mb-12 border-b-4 border-secondary inline-block pb-2">Liên Hệ</h2>
+
+            <div class="max-w-xl mx-auto card p-8 rounded-xl shadow-lg transition-colors duration-300">
+                <p class="text-lg text-center text-gray-400 mb-6">
+                    Hãy liên hệ với tôi qua email hoặc điện thoại để thảo luận về cơ hội làm việc hoặc hợp tác!
+                </p>
+                
+                <form action="#" method="POST" id="contact-form">
+                    <div class="mb-4">
+                        <label for="name" class="block text-sm font-medium mb-1">Tên của bạn</label>
+                        <input type="text" id="name" name="name" required
+                               class="w-full px-4 py-2 border border-gray-600 rounded-lg focus:ring-primary focus:border-primary bg-gray-700 text-white">
+                    </div>
+                    <div class="mb-4">
+                        <label for="email" class="block text-sm font-medium mb-1">Email</label>
+                        <input type="email" id="email" name="email" required
+                               class="w-full px-4 py-2 border border-gray-600 rounded-lg focus:ring-primary focus:border-primary bg-gray-700 text-white">
+                    </div>
+                    <div class="mb-6">
+                        <label for="message" class="block text-sm font-medium mb-1">Nội dung</label>
+                        <textarea id="message" name="message" rows="4" required
+                                  class="w-full px-4 py-2 border border-gray-600 rounded-lg focus:ring-primary focus:border-primary bg-gray-700 text-white"></textarea>
+                    </div>
+                    
+                    <button type="submit" 
+                            class="w-full px-6 py-3 bg-secondary text-white font-semibold rounded-lg shadow-md hover:bg-green-600 transition duration-300 transform hover:scale-[1.02]">
+                        Gửi Tin Nhắn
+                    </button>
+                    
+                    <p id="form-message" class="text-center mt-4 hidden text-green-500 font-medium"></p>
+                </form>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer shadow-inner mt-12 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-gray-400">
+            <p>&copy; 2024 Nguyễn Chí Trọng. Mọi quyền được bảo lưu.</p>
+            <p class="mt-2 text-sm">Thiết kế với ❤️ và Tailwind CSS.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- LOGIC JAVASCRIPT ---
+        
+        // CÁC BIẾN CHUNG
+        const htmlElement = document.documentElement;
+        let usdToVndRate = 0; // Biến toàn cục lưu tỷ giá
+        let pikachuDataCache = null; // Biến cache dữ liệu Pikachu
+        let isPikachuShiny = false; // Trạng thái xem Shiny/Normal
+
+        // 1. Logic chuyển đổi Sáng/Tối (Dark/Light Mode)
+        const themeToggle = document.getElementById('theme-toggle');
+        const sunIcon = document.getElementById('sun-icon');
+        const moonIcon = document.getElementById('moon-icon');
+
+        // Hàm kiểm tra và áp dụng chế độ
+        function applyTheme(isDark) {
+            if (isDark) {
+                htmlElement.classList.add('dark');
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                htmlElement.classList.remove('dark');
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // Khởi tạo Theme
+        const storedTheme = localStorage.getItem('theme');
+        if (storedTheme === 'light') {
+            applyTheme(false);
+        } else {
+            // Mặc định là Dark Mode (do class="dark" trong HTML)
+            applyTheme(true);
+        }
+
+        // Xử lý sự kiện click
+        themeToggle.addEventListener('click', () => {
+            const isDark = htmlElement.classList.contains('dark');
+            applyTheme(!isDark);
+        });
+
+        // 2. Logic Menu Mobile
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // 3. Logic xử lý Form Liên Hệ (chỉ mô phỏng)
+        const contactForm = document.getElementById('contact-form');
+        const formMessage = document.getElementById('form-message');
+
+        contactForm.addEventListener('submit', function(event) {
+            event.preventDefault(); 
+            const name = document.getElementById('name').value;
+            formMessage.textContent = 'Đang gửi...';
+            formMessage.classList.remove('hidden', 'text-green-500', 'text-red-500');
+            formMessage.classList.add('text-gray-500');
+
+            setTimeout(() => {
+                formMessage.textContent = `Cảm ơn ${name}! Tin nhắn của bạn đã được gửi thành công. Tôi sẽ phản hồi sớm nhất có thể.`;
+                formMessage.classList.remove('text-gray-500');
+                formMessage.classList.add('text-green-500');
+                formMessage.classList.remove('hidden');
+                contactForm.reset();
+            }, 1500);
+        });
+        
+        // --- LOGIC TÍCH HỢP API ---
+        
+        // 4. Logic Lấy dữ liệu Pikachu từ PokeAPI
+        const pikachuDataElement = document.getElementById('pikachu-data');
+        const toggleShinyButton = document.getElementById('toggle-shiny-button');
+
+        // Hàm render Pikachu ra giao diện
+        function renderPikachu() {
+            if (!pikachuDataCache) return;
+
+            const data = pikachuDataCache;
+            
+            const pikachuImage = isPikachuShiny 
+                ? data.sprites.front_shiny 
+                : data.sprites.front_default;
+
+            const pikachuAbilities = data.abilities.map(a => a.ability.name).join(', ');
+            const pikachuWeight = data.weight / 10; // Convert to kg
+            const statusText = isPikachuShiny ? 'Shiny' : 'Normal';
+
+            pikachuDataElement.innerHTML = `
+                <img src="${pikachuImage}" alt="Pikachu ${statusText}" class="mx-auto w-32 h-32 object-contain animate-bounce-y">
+                <p class="text-3xl font-extrabold text-poke-yellow mt-4">#${data.id} ${data.name.toUpperCase()} (${statusText})</p>
+                <p class="text-lg text-gray-300 mt-2">Cân nặng: ${pikachuWeight} kg</p>
+                <p class="text-md text-gray-400 mt-1">Khả năng: ${pikachuAbilities}</p>
+                <div class="mt-4 flex flex-wrap justify-center gap-2">
+                    <span class="bg-primary/20 text-primary px-3 py-1 rounded-full text-sm font-medium">Type: ${data.types[0].type.name.toUpperCase()}</span>
+                </div>
+            `;
+            
+            toggleShinyButton.textContent = isPikachuShiny ? 'Xem Normal' : 'Xem Shiny';
+        }
+
+        // Hàm lấy dữ liệu Pikachu
+        async function fetchPikachu() {
+            const apiUrl = 'https://pokeapi.co/api/v2/pokemon/pikachu';
+            pikachuDataElement.innerHTML = `
+                <div class="flex justify-center items-center h-48">
+                    <svg class="animate-spin h-8 w-8 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <p class="text-gray-400 ml-3">Đang tải dữ liệu...</p>
+                </div>
+            `;
+            toggleShinyButton.disabled = true;
+
+
+            try {
+                const response = await fetch(apiUrl);
+                if (!response.ok) {
+                    throw new Error('Không thể tải dữ liệu Pikachu.');
+                }
+                pikachuDataCache = await response.json();
+                renderPikachu();
+            } catch (error) {
+                console.error("Lỗi khi tải Pikachu:", error);
+                pikachuDataElement.innerHTML = `<p class="text-red-400">Lỗi: Không tải được Pikachu.</p>`;
+            } finally {
+                toggleShinyButton.disabled = false;
+            }
+        }
+        
+        // Xử lý sự kiện chuyển đổi Shiny
+        toggleShinyButton.addEventListener('click', () => {
+            isPikachuShiny = !isPikachuShiny;
+            renderPikachu();
+        });
+
+
+        // 5. Logic Chuyển đổi Tỷ giá hối đoái (SỬ DỤNG EXCHANGERATE-API)
+        const refreshRateButton = document.getElementById('refresh-rate-button');
+        const currentRateDisplay = document.getElementById('current-rate-display');
+        const usdInput = document.getElementById('usd-input');
+        const vndInput = document.getElementById('vnd-input');
+
+        // Hàm để làm sạch giá trị nhập, chỉ giữ lại số và dấu chấm thập phân
+        function cleanInput(value) {
+            // Loại bỏ tất cả các ký tự không phải số, dấu chấm (cho USD) hoặc dấu phẩy (cho VND)
+            // và thay thế dấu phẩy (dùng cho VND) bằng dấu chấm (chuẩn JS/TS)
+            return value.toString().replace(/,/g, '').replace(/[^\d.]/g, '');
+        }
+
+        // Hàm tính toán và hiển thị kết quả
+        function convertCurrency(source, rawValue) {
+            const cleanValue = cleanInput(rawValue);
+            const amount = parseFloat(cleanValue);
+            
+            // Nếu không phải là số hợp lệ hoặc tỷ giá chưa có
+            if (isNaN(amount) || amount <= 0 || usdToVndRate === 0) {
+                if (source === 'USD') {
+                    vndInput.value = '';
+                } else {
+                    usdInput.value = '';
+                }
+                return;
+            }
+
+            if (source === 'USD') {
+                // USD -> VND
+                const vndResult = (amount * usdToVndRate).toFixed(0); // Làm tròn VND
+                // Hiển thị VND với định dạng dấu phẩy
+                vndInput.value = vndResult.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            } else if (source === 'VND') {
+                // VND -> USD
+                const usdResult = (amount / usdToVndRate).toFixed(2); // Giữ 2 số thập phân cho USD
+                // Hiển thị USD không cần định dạng dấu phẩy (vì là USD)
+                usdInput.value = usdResult;
+            }
+        }
+
+        // Gắn sự kiện nhập liệu cho USD
+        usdInput.addEventListener('input', (e) => {
+            // Loại bỏ các ký tự không phải số và dấu chấm trong USD input
+            let value = e.target.value;
+            value = value.replace(/[^\d.]/g, '');
+            e.target.value = value;
+            
+            convertCurrency('USD', value);
+        });
+
+        // Gắn sự kiện nhập liệu cho VND
+        vndInput.addEventListener('input', (e) => {
+            // Xóa định dạng dấu phẩy trước khi tính toán
+            let rawVndValue = e.target.value.replace(/,/g, '');
+            rawVndValue = rawVndValue.replace(/[^\d]/g, ''); // Chỉ giữ lại số
+            
+            // Tính toán và hiển thị USD
+            convertCurrency('VND', rawVndValue);
+            
+            // Định dạng lại VND input với dấu phẩy
+            if (rawVndValue) {
+                e.target.value = rawVndValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            } else {
+                e.target.value = '';
+            }
+        });
+        
+        // Hàm lấy tỷ giá từ API
+        async function fetchExchangeRate() {
+            // SỬ DỤNG EXCHANGERATE-API
+            const apiUrl = 'https://api.exchangerate-api.com/v4/latest/USD';
+            
+            // Hiển thị trạng thái tải và vô hiệu hóa nút
+            currentRateDisplay.innerHTML = `Đang tải...`;
+            refreshRateButton.disabled = true;
+
+            try {
+                const response = await fetch(apiUrl);
+                if (!response.ok) {
+                    throw new Error('Lỗi mạng hoặc API không phản hồi.');
+                }
+                const data = await response.json();
+                
+                // KIỂM TRA DỮ LIỆU CỦA EXCHANGERATE-API
+                if (!data.rates || !data.rates.VND) {
+                    throw new Error('Không tìm thấy tỷ giá VND trong phản hồi API.');
+                }
+                
+                usdToVndRate = data.rates.VND;
+                const formattedRate = usdToVndRate.toLocaleString('vi-VN', {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 2
+                });
+                const date = new Date().toLocaleDateString('vi-VN'); // API này không cung cấp ngày chính xác trong v4, dùng ngày hiện tại
+
+                currentRateDisplay.innerHTML = `
+                    1 USD = <span class="text-xl font-bold">${formattedRate} VND</span> (Cập nhật: ${date})
+                `;
+                
+                // Khởi tạo chuyển đổi mặc định cho giá trị 1 USD (sử dụng giá trị hiện tại của input USD)
+                convertCurrency('USD', usdInput.value || 1); 
+
+            } catch (error) {
+                console.error("Lỗi khi tải tỷ giá:", error);
+                usdToVndRate = 0; // Đặt về 0 nếu lỗi
+                currentRateDisplay.innerHTML = `<span class="text-red-400">Lỗi: ${error.message}. Không thể chuyển đổi.</span>`;
+            } finally {
+                refreshRateButton.disabled = false;
+            }
+        }
+        
+        // Thêm sự kiện click cho nút làm mới tỷ giá
+        refreshRateButton.addEventListener('click', fetchExchangeRate);
+
+
+        // 6. Logic Lấy dữ liệu Thời tiết từ Open-Meteo
+        const refreshWeatherButton = document.getElementById('refresh-weather-button'); 
+        const weatherDataElement = document.getElementById('weather-data'); 
+        const weatherLocationElement = document.getElementById('weather-location'); // Element hiển thị vị trí
+
+        function getWeatherIcon(wmoCode) {
+            const icons = {
+                0: '☀️', 1: '🌤️', 2: '⛅', 3: '☁️', 45: '🌫️', 48: '🌫️', 51: '🌧️', 53: '🌧️', 
+                55: '🌧️', 61: '🌦️', 63: '🌧️', 65: '⛈️', 71: '🌨️', 73: '🌨️', 75: '🌨️', 
+                80: '☔', 81: '☔', 82: '⛈️', 95: '🌩️', 96: '⛈️', 99: '⛈️',
+            };
+            return icons[wmoCode] || '❓';
+        }
+
+        function getWeatherDescription(wmoCode) {
+            const descriptions = {
+                0: 'Trời Quang Mây', 1: 'Chủ yếu quang mây', 2: 'Mây rải rác', 3: 'Trời Âm U',
+                45: 'Có Sương Mù', 48: 'Sương mù đóng băng', 51: 'Mưa phùn nhẹ', 53: 'Mưa phùn vừa',
+                55: 'Mưa phùn đậm', 61: 'Mưa nhẹ', 63: 'Mưa vừa', 65: 'Mưa to', 71: 'Tuyết rơi nhẹ',
+                73: 'Tuyết rơi vừa', 75: 'Tuyết rơi dày', 80: 'Mưa rào nhẹ', 81: 'Mưa rào vừa',
+                82: 'Mưa rào lớn', 95: 'Giông bão', 96: 'Giông bão kèm mưa đá nhỏ', 99: 'Giông bão kèm mưa đá lớn',
+            };
+            return descriptions[wmoCode] || 'Không xác định';
+        }
+
+        // Hàm chính để lấy tọa độ và tải thời tiết
+        function fetchWeatherByLocation() {
+            // Hàm sẽ được gọi khi lấy tọa độ thành công
+            const success = (position) => {
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
+                // Cập nhật vị trí hiển thị
+                weatherLocationElement.textContent = `Vị trí hiện tại: (${lat.toFixed(4)}, ${lon.toFixed(4)})`;
+                loadWeather(lat, lon);
+            };
+
+            // Hàm sẽ được gọi khi lấy tọa độ thất bại
+            const error = (err) => {
+                console.warn(`LỖI GEOLOCATION (${err.code}): ${err.message}`);
+                // Tọa độ mặc định mới: TP. Hồ Chí Minh
+                const defaultLat = 10.8231; 
+                const defaultLon = 106.6297;
+                weatherLocationElement.textContent = `Mô phỏng tại: TP. Hồ Chí Minh (10.8231, 106.6297) (Vị trí bị từ chối/Không hỗ trợ)`;
+                loadWeather(defaultLat, defaultLon);
+            };
+
+            // Cấu hình Geolocation API
+            const options = {
+                enableHighAccuracy: true,
+                timeout: 5000,
+                maximumAge: 0
+            };
+
+            // Kiểm tra xem trình duyệt có hỗ trợ Geolocation không
+            if (navigator.geolocation) {
+                weatherLocationElement.textContent = 'Đang tìm vị trí hiện tại...';
+                navigator.geolocation.getCurrentPosition(success, error, options);
+            } else {
+                error({code: 0, message: "Trình duyệt không hỗ trợ Geolocation."});
+            }
+        }
+        
+        // Hàm tải dữ liệu thời tiết từ Open-Meteo
+        async function loadWeather(lat, lon) {
+            
+            weatherDataElement.innerHTML = `
+                <div class="flex flex-col justify-center items-center h-48">
+                    <svg class="animate-spin h-8 w-8 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <p class="text-gray-400 ml-3 mt-2">Đang tải dữ liệu...</p>
+                </div>
+            `;
+            if (refreshWeatherButton) {
+                refreshWeatherButton.disabled = true;
+            }
+
+            const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=temperature_2m,relative_humidity_2m,weather_code&timezone=auto`;
+            
+            try {
+                const response = await fetch(apiUrl);
+                if (!response.ok) {
+                    throw new Error('Không thể tải dữ liệu thời tiết từ API.');
+                }
+                const data = await response.json();
+                const currentWeather = data.current_weather;
+
+                const temp = currentWeather.temperature;
+                const windSpeed = currentWeather.windspeed;
+                const wmoCode = currentWeather.weathercode;
+                
+                const icon = getWeatherIcon(wmoCode);
+                const description = getWeatherDescription(wmoCode);
+                
+                weatherDataElement.innerHTML = `
+                    <div class="text-6xl my-4">${icon}</div>
+                    <p class="text-5xl font-extrabold text-blue-400">${temp}°C</p>
+                    <p class="text-xl text-gray-300 mt-2">${description}</p>
+                    <p class="text-md text-gray-400 mt-1">Tốc độ gió: ${windSpeed} km/h</p>
+                    <div class="mt-4 flex flex-wrap justify-center gap-2">
+                        <span class="bg-blue-600/20 text-blue-300 px-3 py-1 rounded-full text-sm font-medium">WMO Code: ${wmoCode}</span>
+                    </div>
+                `;
+
+            } catch (error) {
+                console.error("Lỗi khi tải thời tiết:", error);
+                weatherDataElement.innerHTML = `<p class="text-red-400">Lỗi: ${error.message}.</p>`;
+            } finally {
+                if (refreshWeatherButton) {
+                    refreshWeatherButton.disabled = false;
+                }
+            }
+        }
+        
+        // Gọi API khi trang được tải xong và thiết lập sự kiện làm mới
+        window.onload = function() {
+            fetchPikachu();
+            fetchWeatherByLocation(); // Thay thế fetchWeather cũ bằng hàm mới
+
+            // Gắn sự kiện click cho nút làm mới thời tiết sau khi DOM đã tải
+            const refreshWeatherButtonElement = document.getElementById('refresh-weather-button');
+            if (refreshWeatherButtonElement) {
+                // Khi người dùng bấm làm mới, gọi lại hàm lấy vị trí và thời tiết
+                refreshWeatherButtonElement.addEventListener('click', fetchWeatherByLocation);
+            }
+            
+            fetchExchangeRate();
+        };
+
+    </script>
+</body>
+</html>
