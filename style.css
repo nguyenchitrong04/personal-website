@@ -1,0 +1,43 @@
+html {
+    scroll-behavior: smooth;
+}
+
+/* Style cho chế độ tối (Màu sắc mặc định khi có class 'dark' trên <html>) */
+.dark body {
+    background-color: #1a1a2e; /* Nền tối */
+    color: #e4e4f0; /* Chữ sáng */
+}
+.dark .card {
+    background-color: #2c2c54;
+}
+.dark .navbar {
+    background-color: #16162d;
+}
+.dark .footer {
+    background-color: #16162d;
+}
+
+/* Style riêng cho các mục CV */
+.cv-item {
+    border-left: 3px solid #10b981;
+    padding-left: 1rem;
+}
+
+/* Animation cho Pikachu card */
+@keyframes bounce-y {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+.animate-bounce-y {
+    animation: bounce-y 1.5s infinite;
+}
+
+/* Custom weather icon styling */
+.weather-icon {
+    display: inline-block;
+    width: 48px;
+    height: 48px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin: 0 auto;
+}

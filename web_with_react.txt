@@ -1,0 +1,8 @@
+Họ và tên: Nguyễn Chí Trọng
+MSSV: 22130201
+
+1.Link trang web:
+https://personal-web-with-react.vercel.app/
+
+2.Link github:
+https://github.com/nguyenchitrong04/personal_web-with-react
