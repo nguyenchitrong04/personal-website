@@ -1,8 +1,1 @@
-Họ và tên: Nguyễn Chí Trọng
-MSSV: 22130201
 
-1.Link trang web:
-https://nguyenchitrong04.github.io/personal-website/
-
-2.Link github:
-https://github.com/nguyenchitrong04/personal-website
